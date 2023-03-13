@@ -1,0 +1,3 @@
+# Keskustelupalstasovellus
+
+Tietokantasovellus harjoitustyö

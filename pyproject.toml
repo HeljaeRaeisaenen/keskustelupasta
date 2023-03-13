@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "palsta23"
+version = "0.1.0"
+description = "Tietokantasovellus harjoitustyö"
+authors = ["HeljaeRaeisaenen <94612974+HeljaeRaeisaenen@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^2.2.3"
+flask-sqlalchemy = "^3.0.3"
+psycopg2 = "^2.9.5"
+python-dotenv = "^0.21.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
