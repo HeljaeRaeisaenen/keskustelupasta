@@ -1,5 +1,9 @@
 <title>Keskustelupalsta</title>
 <h1>Keskustelupasta</h1>
-<b>Tervetuloa</b>
-
-
+<b>Avoimet keskustelut:</b>
+<hr>
+{% for post in posts %}
+<a href="/keskustelu/{{ post.id }}">{{ post.title }}</a>
+<p>Luotu {{ post.time.strftime("%d.%m.%Y %H:%M") }} </p> 
+{% endfor %}
+<hr>
