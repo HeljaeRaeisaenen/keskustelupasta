@@ -30,7 +30,8 @@ def discussion(id):
     sql = text("SELECT * FROM posts WHERE id=:id")
     result = db.session.execute(sql, {"id":id})
     post = result.fetchone()
-    return render_template("discussion.html", post=post)
+    username = get_user(post.user_id)
+    return render_template("discussion.html", post=post, username=username)
 
 @app.route("/uusi")
 def new_post():
@@ -46,3 +47,9 @@ def create():
     post_id = result.fetchone()[0]
     db.session.commit()
     return redirect(f"/keskustelu/{post_id}")
+
+###################################################################
+def get_user(id):
+    result = db.session.execute(text("SELECT username FROM users WHERE id=:id"), {"id":id})
+    username = result.fetchone()[0]
+    return username
