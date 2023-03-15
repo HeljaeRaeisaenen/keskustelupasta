@@ -35,7 +35,7 @@ def discussion(id):
 
 @app.route("/uusi")
 def new_post():
-    return
+    return render_template("post_form.html")
 
 @app.route("/create", methods=["POST"])
 def create():
