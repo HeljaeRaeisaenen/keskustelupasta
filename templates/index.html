@@ -1,5 +1,16 @@
 <title>Keskustelupalsta</title>
 <h1>Keskustelupasta</h1>
+
+{% if session.username %}
+<p>Kirjautuneena sisään: {{ session.username }}
+<a href="/logout">Kirjaudu ulos</a></p>
+{% else %}
+<a href="/login">Kirjaudu sisään</a>
+{% endif %}
+<br>
+
+<br>
+
 <b>Avoimet keskustelut:</b>
 <hr>
 {% for post in posts %}
