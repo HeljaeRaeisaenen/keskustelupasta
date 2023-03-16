@@ -4,6 +4,7 @@
 {% if session.username %}
 <p>Kirjautuneena sisään: {{ session.username }}
 <a href="/logout">Kirjaudu ulos</a></p>
+<a href="/new">Luo keskustelu</a>
 {% else %}
 <a href="/login">Kirjaudu sisään</a>
 {% endif %}
@@ -14,9 +15,8 @@
 <b>Avoimet keskustelut:</b>
 <hr>
 {% for post in posts %}
-<a href="/keskustelu/{{ post.id }}">{{ post.title }}</a>
+<a href="/posts/{{ post.id }}">{{ post.title }}</a>
 <p>Luotu {{ post.time.strftime("%d.%m.%Y %H:%M") }} </p> 
 <hr>
 {% endfor %}
 <br>
-<a href="/uusi">Luo uusi</a>
