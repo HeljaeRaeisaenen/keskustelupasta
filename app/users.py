@@ -20,7 +20,6 @@ def verify_user(username, password):
         return True
     return False
 
-
 def find_user_by_id(id):
     result = db.session.execute(text("SELECT username FROM users WHERE id=:id"), {"id":id})
     username = result.fetchone()[0]

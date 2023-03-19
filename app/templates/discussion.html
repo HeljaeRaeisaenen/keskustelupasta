@@ -3,4 +3,24 @@
 
 <p>{{ post.message }}</p>
 <br>
+{% if session.username %}
+<form action="" method="POST">
+    Kommentoi keskustelua <br>
+    <textarea name="comment" rows="5" cols="50"></textarea>
+    <input type="submit" value="Lähetä">
+</form>
+{% endif %}
+<br>
+{% for comment in comments %}
+<hr>
+{{ comment.username }} <i>vastasi aikaan</i> {{ comment.time.strftime("%d.%m.%Y %H:%M") }}:
+<br>
+<br>
+{{ comment.message }}
+<br>
+<br>
+
+{% endfor %}
+<hr>
+<br>
 <a href="/">Takaisin</a>

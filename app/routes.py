@@ -1,6 +1,7 @@
 from app import app
 import users
 import discussions
+import comments
 from flask import render_template, request, redirect, session
 
 @app.route("/")
@@ -49,14 +50,29 @@ def sing_up_action():
 @app.route("/posts/<int:id>")
 def show_post(id):
     post,username = discussions.get_post(id)
-    return render_template("discussion.html", post=post, username=username)
+    post_comments = comments.get_comments(id)
+    return render_template("discussion.html", 
+                           post=post, 
+                           comments=post_comments, 
+                           username=username)
+
+@app.route("/posts/<int:id>", methods=["POST"])
+def comment_post(id):
+    user = session["username"]
+    comment = request.form["comment"]
+    comments.create_comment(user, id, comment)
+    return redirect(f"/posts/{id}")
+
 
 @app.route("/new")
 def new_post():
     return render_template("post_form.html")
 
 @app.route("/create", methods=["POST"])
-def create():
+def create_post():
+    found = users.find_user_by_username(session["username"])
+    if not found:
+        return redirect("/") # ERRORMESSAGE
     title = request.form["title"]
     message = request.form["message"]
 
