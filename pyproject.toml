@@ -11,7 +11,12 @@ flask = "^2.2.3"
 flask-sqlalchemy = "^3.0.3"
 psycopg2 = "^2.9.5"
 python-dotenv = "^0.21.1"
+invoke = "^2.0.0"
 
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.17.0"
+autopep8 = "^2.0.2"
 
 [build-system]
 requires = ["poetry-core"]

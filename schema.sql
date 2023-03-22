@@ -1,4 +1,4 @@
-CREATE TABLE users (id SERIAL PRIMARY KEY, username TEXT, passwordhash TEXT);
+CREATE TABLE users (id SERIAL PRIMARY KEY, username TEXT UNIQUE, passwordhash TEXT);
 
 CREATE TABLE posts (id SERIAL PRIMARY KEY, title TEXT, message TEXT, time TIMESTAMP, user_id INTEGER REFERENCES users, topic_id INTEGER REFERENCES topics);
 
