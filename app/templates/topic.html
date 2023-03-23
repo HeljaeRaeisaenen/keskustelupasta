@@ -1,3 +1,21 @@
+<title>Keskustelupalsta</title>
+<h1>{{ topic }}</h1>
+
+{% if session.username %}
+    <p>Kirjautuneena sisään: {{ session.username }}
+    <a href="/logout">Kirjaudu ulos</a></p>
+    <a href="/new"><b>Luo keskustelu</b></a>
+{% else %}
+    <a href="/login">Kirjaudu sisään</a>
+{% endif %}
+
 {% for post in posts %}
-<p>Luotu {{ post.time.strftime("%d.%m.%Y %H:%M") }} </p> 
+    <a href="/posts/{{ post.id }}"><h2>{{ post.title }}</h2></a>
+    <p>Käyttäjältä {{ post.username }}</p>
+    <p>Luotu {{ post.time.strftime("%d.%m.%Y %H:%M") }} </p> 
+    <p>Viimeisin viesti ... </p>
 {% endfor %}
+
+<br>
+<br>
+<a href="/">Takaisin</a>

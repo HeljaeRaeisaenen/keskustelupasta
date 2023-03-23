@@ -1,9 +1,21 @@
+<h2>Luo uusi keskustelu:</h2>
+
 <form action="/create" method="POST">
     Otsikko: <br>
     <textarea name="title" rows="1" cols="50"></textarea>
     <br>
+    Aihealue: <br>
+    <select name="topic" id="topic">
+        {% for t in topics%}
+            <option value="{{ t.topic }}">{{ t.topic }}</option>
+        {% endfor%}
+    </select> <br>
+    
     Viesti: <br>
     <textarea name="message" rows="5" cols="50"></textarea>
     <br>
     <input type="submit" value="Lähetä">
 </form>
+
+<br>
+<a href="/">Takaisin</a>

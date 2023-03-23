@@ -25,14 +25,14 @@ def verify_user(username, password):
     return False
 
 
-def find_user_by_id(user_id):
+def find_username(user_id):
     result = db.session.execute(
         text("SELECT username FROM users WHERE id=:id"), {"id": user_id})
     username = result.fetchone()[0]
     return username
 
 
-def find_user_by_username(username):
+def find_user_id(username):
     result = db.session.execute(
         text("SELECT id FROM users WHERE username=:username"), {"username": username})
     user_id = result.fetchone()[0]

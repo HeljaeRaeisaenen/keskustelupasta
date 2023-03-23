@@ -2,11 +2,11 @@
 <h1>Keskustelupasta</h1>
 
 {% if session.username %}
-<p>Kirjautuneena sisään: {{ session.username }}
-<a href="/logout">Kirjaudu ulos</a></p>
-<a href="/new">Luo keskustelu</a>
+    <p>Kirjautuneena sisään: {{ session.username }}
+    <a href="/logout">Kirjaudu ulos</a></p>
+    <a href="/new"></b>Luo keskustelu</b></a>
 {% else %}
-<a href="/login">Kirjaudu sisään</a>
+    <a href="/login">Kirjaudu sisään</a>
 {% endif %}
 <br>
 
@@ -15,19 +15,19 @@
 <h2>Keskustelunaiheet:</h2>
 <hr>
 {% for t in topics %}
-<h2>{{ t.topic }}</h2>
-{{ t.count }} avointa keskustelua 
-<br>
-<h4>
-{% if posts[t.id].title == null %}
-Aihealueella ei ole vielä keskusteluja.
-{% else %}
-Uusin keskustelu:
-<a href="/posts/{{ t.max }}">{{ posts[t.id].title }}</a>
-{% endif %}</h4>
-<br>
-<a href="/topics/{{ t.id }}"> Siirry aiheauleelle</a>
-<hr>
+    <h2>{{ t.topic }}</h2>
+    {{ t.count }} avointa keskustelua 
+    <br>
+    <h4>
+    {% if posts[t.id].title == null %}
+        Aihealueella ei ole vielä keskusteluja.
+    {% else %}
+        Uusin keskustelu:
+        <a href="/posts/{{ t.max }}">{{ posts[t.id].title }}</a>
+    {% endif %}</h4>
+    <br>
+    <a href="/topics/{{ t.topic }}"> Siirry aiheauleelle</a>
+    <hr>
 
 {% endfor %}
 <br>

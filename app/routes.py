@@ -14,7 +14,7 @@ def index():
         if not t.max:
             topic_posts[t.id] = None
         else:
-            topic_posts[t.id] = discussions.get_post(t.max)[0]
+            topic_posts[t.id] = discussions.get_post(t.max)
          #post
     return render_template("index.html", topics=topic_s, posts=topic_posts)
 
@@ -61,41 +61,44 @@ def sing_up_action():
     print(session)
     return redirect("/")
 
-@app.route("/topics/<int:topic_id>")
-def show_topic(topic_id):
-    pass
+@app.route("/topics/<topic_name>")
+def show_topic(topic_name):
+    topic_id = topics.get_id(topic_name)
+    topic_posts = discussions.get_all_posts(topic_id)
+    return render_template("topic.html", topic=topic_name, posts=topic_posts)
 
 @app.route("/posts/<int:post_id>")
 def show_post(post_id):
-    post, username = discussions.get_post(post_id)
+    post = discussions.get_post(post_id)
     post_comments = comments.get_comments(post_id)
     return render_template("discussion.html",
                            post=post,
-                           comments=post_comments,
-                           username=username)
+                           comments=post_comments)
 
 
 @app.route("/posts/<int:post_id>", methods=["POST"])
 def comment_post(post_id):
-    user = session["username"]
+    user_id = users.find_user_id(session["username"])
     comment = request.form["comment"]
-    comments.create_comment(user, post_id, comment)
+    comments.create_comment(user_id, post_id, comment)
     return redirect(f"/posts/{post_id}")
 
 
 @app.route("/new")
 def new_post():
-    return render_template("post_form.html")
+    topic_s = topics.get_all()
+    return render_template("post_form.html", topics=topic_s)
 
 
 @app.route("/create", methods=["POST"])
 def create_post():
-    found = users.find_user_by_username(session["username"])
-    if not found:
+    found_user = users.find_user_id(session["username"])
+    if not found_user:
         return redirect("/")  # ERRORMESSAGE
     title = request.form["title"]
     message = request.form["message"]
+    topic_id = topics.get_id(request.form["topic"])
 
-    post_id = discussions.create_post(title, message, session["username"])
+    post_id = discussions.create_post(title, message, topic_id, found_user)
 
     return redirect(f"/posts/{post_id}")

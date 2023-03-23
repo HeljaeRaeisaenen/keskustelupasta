@@ -1,26 +1,26 @@
 <h3>{{ post.title }}</h3>
-<p><i>Luonut</i> {{ username }} <i>aikaan</i> {{ post.time.strftime("%d.%m.%Y %H:%M") }}</p>
+<p><i>Luonut</i> {{ post.username }} <i>aikaan</i> {{ post.time.strftime("%d.%m.%Y %H:%M") }}</p>
 
 <p>{{ post.message }}</p>
 <br>
 {% if session.username %}
-<form action="/posts/{{ post.id }}" method="POST">
-    Kommentoi keskustelua <br>
-    <textarea name="comment" rows="5" cols="50"></textarea>
-    <input type="submit" value="Lähetä">
-</form>
+    <form action="/posts/{{ post.id }}" method="POST">
+        Kommentoi keskustelua <br>
+        <textarea name="comment" rows="5" cols="50"></textarea>
+        <input type="submit" value="Lähetä">
+    </form>
 {% endif %}
 <br>
 {% for comment in comments %}
-<hr>
-{{ comment.username }} <i>vastasi aikaan</i> {{ comment.time.strftime("%d.%m.%Y %H:%M") }}:
-<br>
-<br>
-{{ comment.message }}
-<br>
-<br>
+    <hr>
+    {{ comment.username }} <i>vastasi aikaan</i> {{ comment.time.strftime("%d.%m.%Y %H:%M") }}:
+    <br>
+    <br>
+    {{ comment.message }}
+    <br>
+    <br>
 
 {% endfor %}
 <hr>
 <br>
-<a href="/">Takaisin</a>
+<a href="/topics/{{ post.topic }}">Takaisin alueelle <i>{{ post.topic }}</i></a>

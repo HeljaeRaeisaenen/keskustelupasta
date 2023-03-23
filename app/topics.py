@@ -12,3 +12,9 @@ def get_all():
 #select t.topic, p.id, p.title from topics t inner join posts p on t.id=p.topic_id order by p.id desc;
 
 #"SELECT * FROM topics ORDER BY id DESC UNION SELCT max(id) FROM posts where "
+
+
+def get_id(topic_name):
+    sql = text("SELECT id FROM topics WHERE topic=:topic")
+    result = db.session.execute(sql, {"topic":topic_name})
+    return result.fetchone()[0]
