@@ -1,8 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+
 <h3>{{ post.title }}</h3>
 <p><i>Luonut</i> {{ post.username }} <i>aikaan</i> {{ post.time.strftime("%d.%m.%Y %H:%M") }}</p>
 
 <p>{{ post.message }}</p>
 <br>
+<hr>
+
 {% if session.username %}
     <form action="/posts/{{ post.id }}" method="POST" onsubmit="return check(this)">
         Kommentoi keskustelua <br>
@@ -38,3 +44,4 @@
     return true;
     }
 </script>
+{% endblock %}

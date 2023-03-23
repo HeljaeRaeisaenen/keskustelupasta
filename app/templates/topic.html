@@ -1,12 +1,12 @@
-<title>Keskustelupalsta</title>
+{% extends "layout.html" %}
+{% block title %}{{ topic }}{% endblock %}
+{% block content %}
 <h1>{{ topic }}</h1>
 
 {% if session.username %}
     <p>Kirjautuneena sisään: {{ session.username }}
     <a href="/logout">Kirjaudu ulos</a></p>
     <a href="/new"><b>Luo keskustelu</b></a>
-{% else %}
-    <a href="/login">Kirjaudu sisään</a>
 {% endif %}
 
 {% for post in posts %}
@@ -18,4 +18,5 @@
 
 <br>
 <br>
-<a href="/">Takaisin</a>
+<a href="/">Takaisin etusivulle</a>
+{% endblock %}

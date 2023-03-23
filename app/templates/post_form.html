@@ -1,3 +1,7 @@
+{% extends "layout.html" %}
+{% block title %}Luo uusi{% endblock %}
+{% block content %}
+
 <h2>Luo uusi keskustelu:</h2>
 
 <form action="/create" method="POST" onsubmit="return check(this)">
@@ -19,7 +23,7 @@
 </form>
 
 <br>
-<a href="/">Takaisin</a>
+<a href="/">Takaisin etusivulle</a>
 
 
 <script>
@@ -36,6 +40,12 @@
             alert("Aihealue on pakollinen")
             return false;
         }
+        if (!form.title.value) {
+            alert("Otsikko on pakollinen");
+            return false;
+        }
     return true;
     }
 </script>
+
+{% endblock %}

@@ -1,16 +1,6 @@
-<title>Keskustelupalsta</title>
-<h1>Keskustelupasta</h1>
-
-{% if session.username %}
-    <p>Kirjautuneena sisään: {{ session.username }}
-    <a href="/logout">Kirjaudu ulos</a></p>
-    <a href="/new"></b>Luo keskustelu</b></a>
-{% else %}
-    <a href="/login">Kirjaudu sisään</a> tai <a href="/signup">luo uusi käyttäjätunnus</a>
-{% endif %}
-<br>
-
-<br>
+{% extends "layout.html" %}
+{% block title %}Etusivu{% endblock %}
+{% block content %}
 
 <h2>Keskustelunaiheet:</h2>
 <hr>
@@ -31,3 +21,4 @@
 
 {% endfor %}
 <br>
+{% endblock %}
