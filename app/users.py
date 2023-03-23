@@ -28,12 +28,19 @@ def verify_user(username, password):
 def find_username(user_id):
     result = db.session.execute(
         text("SELECT username FROM users WHERE id=:id"), {"id": user_id})
-    username = result.fetchone()[0]
-    return username
+    username = result.fetchone()
+    if not username:
+        print('no usernmae found')
+        return None
+    return username[0]
 
 
 def find_user_id(username):
     result = db.session.execute(
         text("SELECT id FROM users WHERE username=:username"), {"username": username})
-    user_id = result.fetchone()[0]
-    return user_id
+    user_id = result.fetchone()
+
+    if not user_id:
+        print('no user found')
+        return None
+    return user_id[0]

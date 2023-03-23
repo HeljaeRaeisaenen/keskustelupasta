@@ -1,4 +1,4 @@
-<form action="/signup" method="POST">
+<form action="/signup" method="POST" onsubmit="return check(this)">
     Käyttäjätunnus:
     <input type="text" name="username">
     <br>
@@ -9,5 +9,24 @@
     <input type="password" name="password_again">
     <br>
     <input type="submit" value="Lähetä">
-    </form>
-    
+</form>
+
+<a href="/">Takaisin</a>
+
+<script>
+    function check(form) {
+        if (!form.username.value) {
+            alert("Käyttäjätunnus ei saa olla tyhjä");
+            return false;
+        }
+        if (!form.password.value) {
+            alert("Salasana ei saa olla tyhjä");
+            return false;
+        }
+        if (form.password.value !== form.password_again.value) {
+            alert("Salasanat eivät olleet samat");
+            return false;
+        }
+    return true;
+    }
+</script>

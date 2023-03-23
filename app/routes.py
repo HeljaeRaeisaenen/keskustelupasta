@@ -1,4 +1,5 @@
-from flask import render_template, request, redirect, session
+from flask import render_template, request, redirect, session, abort
+from secrets import token_hex
 from .app import app
 from . import users
 from . import topics
@@ -31,6 +32,8 @@ def loginaction():
 
     if users.verify_user(username, password):
         session["username"] = username
+        session["user_id"] = users.find_user_id(username)
+        session["csrf_token"] = token_hex(16)
         return redirect("/")
     else:
         return redirect("/")  # ERRORMESSAGE
@@ -39,6 +42,8 @@ def loginaction():
 @app.route("/logout")
 def logout_action():
     del session["username"]
+    del session["user_id"]
+    del session["csrf_token"]
     return redirect("/")
 
 
@@ -54,11 +59,14 @@ def sing_up_action():
 
     if password != request.form["password_again"]:
         return redirect("/signup")  # ERRORMESSAGE
+    
+    if users.find_user_id(username):
+        return redirect("/signup")  # ERRORMESSAGE
 
     users.create_user(username, password)
 
     session["username"] = username
-    print(session)
+    #print(session)
     return redirect("/")
 
 @app.route("/topics/<topic_name>")
@@ -78,8 +86,15 @@ def show_post(post_id):
 
 @app.route("/posts/<int:post_id>", methods=["POST"])
 def comment_post(post_id):
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
     user_id = users.find_user_id(session["username"])
+    if not user_id:
+        pass #ERRORMESSAGE
     comment = request.form["comment"]
+    if len(comment) > 5000:
+        return redirect("/") # ERRORMESSAGE
     comments.create_comment(user_id, post_id, comment)
     return redirect(f"/posts/{post_id}")
 
@@ -92,6 +107,9 @@ def new_post():
 
 @app.route("/create", methods=["POST"])
 def create_post():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
     found_user = users.find_user_id(session["username"])
     if not found_user:
         return redirect("/")  # ERRORMESSAGE
@@ -99,6 +117,16 @@ def create_post():
     message = request.form["message"]
     topic_id = topics.get_id(request.form["topic"])
 
+    if (len(title) > 75) or (not title):
+        return redirect("/") # ERRORMESSAGE
+    if (len(message) > 5000) or (not message):
+        return redirect("/") # ERRORMESSAGE
+
     post_id = discussions.create_post(title, message, topic_id, found_user)
 
     return redirect(f"/posts/{post_id}")
+
+@app.route("/newtopic", methods=["POST"])
+def create_topic():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)

@@ -1,6 +1,6 @@
 <h2>Luo uusi keskustelu:</h2>
 
-<form action="/create" method="POST">
+<form action="/create" method="POST" onsubmit="return check(this)">
     Otsikko: <br>
     <textarea name="title" rows="1" cols="50"></textarea>
     <br>
@@ -15,7 +15,27 @@
     <textarea name="message" rows="5" cols="50"></textarea>
     <br>
     <input type="submit" value="Lähetä">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 
 <br>
 <a href="/">Takaisin</a>
+
+
+<script>
+    function check(form) {
+        if (form.title.value.length > 75) {
+            alert("Otsikko saa olla enintään 75 merkkiä pitkä");
+            return false;
+        }
+        if (form.message.value.length > 5000) {
+            alert("Viesti saa olla enintään 5000 merkkiä pitkä");
+            return false;
+        }
+        if(!form.topic.value) {
+            alert("Aihealue on pakollinen")
+            return false;
+        }
+    return true;
+    }
+</script>

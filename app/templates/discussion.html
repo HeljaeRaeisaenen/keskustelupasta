@@ -4,10 +4,11 @@
 <p>{{ post.message }}</p>
 <br>
 {% if session.username %}
-    <form action="/posts/{{ post.id }}" method="POST">
+    <form action="/posts/{{ post.id }}" method="POST" onsubmit="return check(this)">
         Kommentoi keskustelua <br>
         <textarea name="comment" rows="5" cols="50"></textarea>
         <input type="submit" value="Lähetä">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
 {% endif %}
 <br>
@@ -24,3 +25,16 @@
 <hr>
 <br>
 <a href="/topics/{{ post.topic }}">Takaisin alueelle <i>{{ post.topic }}</i></a>
+
+<script>
+    function check(form) {
+        if (form.comment.value.length > 5000) {
+            alert("Viesti saa olla enintään 5000 merkkiä pitkä");
+            return false;
+        }
+        if(!form.comment.value) {
+            return false;
+        }
+    return true;
+    }
+</script>
