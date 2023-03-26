@@ -16,8 +16,14 @@ def index():
             topic_posts[t.id] = None
         else:
             topic_posts[t.id] = discussions.get_post(t.max)
-         #post
-    return render_template("index.html", topics=topic_s, posts=topic_posts)
+    try:
+        admin = users.is_admin(session["username"])
+    except KeyError:
+        admin = False
+    return render_template("index.html",
+                           topics=topic_s,
+                           posts=topic_posts,
+                           user_is_admin=admin)
 
 
 @app.route("/login")
@@ -31,9 +37,8 @@ def loginaction():
     password = request.form["password"]
 
     if users.verify_user(username, password):
-        session["username"] = username
-        session["user_id"] = users.find_user_id(username)
-        session["csrf_token"] = token_hex(16)
+        create_session(username)
+
         return redirect("/")
     else:
         return redirect("/")  # ERRORMESSAGE
@@ -59,21 +64,27 @@ def sing_up_action():
 
     if password != request.form["password_again"]:
         return redirect("/signup")  # ERRORMESSAGE
-    
+
     if users.find_user_id(username):
         return redirect("/signup")  # ERRORMESSAGE
 
     users.create_user(username, password)
 
-    session["username"] = username
-    #print(session)
+    create_session(username)
+
+    # print(session)
     return redirect("/")
+
 
 @app.route("/topics/<topic_name>")
 def show_topic(topic_name):
     topic_id = topics.get_id(topic_name)
     topic_posts = discussions.get_all_posts(topic_id)
-    return render_template("topic.html", topic=topic_name, posts=topic_posts)
+    return render_template("topic.html",
+                           topic=topic_name,
+                           posts=topic_posts,
+                           session=session)
+
 
 @app.route("/posts/<int:post_id>")
 def show_post(post_id):
@@ -81,7 +92,8 @@ def show_post(post_id):
     post_comments = comments.get_comments(post_id)
     return render_template("discussion.html",
                            post=post,
-                           comments=post_comments)
+                           comments=post_comments,
+                           session=session)
 
 
 @app.route("/posts/<int:post_id>", methods=["POST"])
@@ -91,10 +103,10 @@ def comment_post(post_id):
 
     user_id = users.find_user_id(session["username"])
     if not user_id:
-        pass #ERRORMESSAGE
+        pass  # ERRORMESSAGE
     comment = request.form["comment"]
     if len(comment) > 5000:
-        return redirect("/") # ERRORMESSAGE
+        return redirect("/")  # ERRORMESSAGE
     comments.create_comment(user_id, post_id, comment)
     return redirect(f"/posts/{post_id}")
 
@@ -102,7 +114,7 @@ def comment_post(post_id):
 @app.route("/new")
 def new_post():
     topic_s = topics.get_all()
-    return render_template("post_form.html", topics=topic_s)
+    return render_template("post_form.html", topics=topic_s, session=session)
 
 
 @app.route("/create", methods=["POST"])
@@ -118,15 +130,45 @@ def create_post():
     topic_id = topics.get_id(request.form["topic"])
 
     if (len(title) > 75) or (not title):
-        return redirect("/") # ERRORMESSAGE
+        return redirect("/")  # ERRORMESSAGE
     if (len(message) > 5000) or (not message):
-        return redirect("/") # ERRORMESSAGE
+        return redirect("/")  # ERRORMESSAGE
 
     post_id = discussions.create_post(title, message, topic_id, found_user)
 
     return redirect(f"/posts/{post_id}")
 
+
+
 @app.route("/newtopic", methods=["POST"])
 def create_topic():
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
+    if not users.is_admin(session["username"]):
+        abort(403)
+    print(request.form)
+    topic = request.form["newtopic"]
+    created = topics.create(topic)
+    return redirect(f"/topics/{created}")
+
+@app.route("/adminpage")
+def adminpage():
+    if not users.is_admin(session["username"]):
+        abort(403)
+    user_s = users.get_all()
+    topic_s = topics.get_all()
+    return render_template("adminpage.html", users=user_s, topics=topic_s)
+
+@app.route("/deleteuser", methods=["POST"])
+def delete_user():
+    pass
+
+@app.route("/deletetopic", methods=["POST"])
+def delete_topic():
+    pass
+#################################################################
+# helpers
+def create_session(username):
+    session["username"] = username
+    session["user_id"] = users.find_user_id(username)  # useful??
+    session["csrf_token"] = token_hex(16)

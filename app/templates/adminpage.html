@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block title %} Administration {% endblock %}
+{% block content %}
+Poista keskustelunaiheita HUOM. tämä ei poista aiheiden viestejä eikä kommentteja.
+<br>
+<form action="/deletetopic" method="POST" onsubmit="return areYouSure(this)">
+    <select name="todelete" id="topic">
+        {% for t in topics%}
+            <option value="{{ t.topic }}">{{ t.topic }}</option>
+        {% endfor%}
+    </select>
+    <input type="submit" value="Poista">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</form>
+<br>
+
+Poista käyttäjiä, tämä ei poista käyttäjän luomia viestejä tai kommentteja <br>
+<form action="/deleteuser" method="POST" onsubmit="return areYouSure(this)">
+    <select name="todelete" id="topic">
+        {% for u in users%}
+            <option value="{{ u.username }}">{{ u.username }}</option>
+        {% endfor%}
+    </select>
+    <input type="submit" value="Poista">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</form>
+<br>
+
+<script>
+    function areYouSure(form) {
+        return confirm(`Are you sure you want to delete ${form.todelete.value}?`)
+    }
+
+</script>
+
+{% endblock %}

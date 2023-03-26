@@ -3,17 +3,11 @@
 {% block content %}
 <h1>{{ topic }}</h1>
 
-{% if session.username %}
-    <p>Kirjautuneena sisään: {{ session.username }}
-    <a href="/logout">Kirjaudu ulos</a></p>
-    <a href="/new"><b>Luo keskustelu</b></a>
-{% endif %}
-
 {% for post in posts %}
     <a href="/posts/{{ post.id }}"><h2>{{ post.title }}</h2></a>
     <p>Käyttäjältä {{ post.username }}</p>
     <p>Luotu {{ post.time.strftime("%d.%m.%Y %H:%M") }} </p> 
-    <p>Viimeisin viesti ... </p>
+    <p>Viimeisin viesti ... </p> <!--TODO-->
 {% endfor %}
 
 <br>

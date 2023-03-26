@@ -11,7 +11,7 @@
 
 {% if session.username %}
     <form action="/posts/{{ post.id }}" method="POST" onsubmit="return check(this)">
-        Kommentoi keskustelua <br>
+        <i>Kommentoi keskustelua</i> <br>
         <textarea name="comment" rows="5" cols="50"></textarea>
         <input type="submit" value="Lähetä">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">

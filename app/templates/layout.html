@@ -1,4 +1,6 @@
 <!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Keskustelupalsta - {% block title %}{% endblock %}</title>
 <h1>Keskustelupasta</h1>
 
@@ -9,8 +11,35 @@
 {% else %}
     <a href="/login">Kirjaudu sisään</a> tai <a href="/signup">luo uusi käyttäjätunnus</a>
 {% endif %}
+{% if user_is_admin %}
+    <hr>
+    <a href="/adminpage" class="button">Hallinnoi sivustoa</a> <!--TODO button-->
+    <hr>
+
+    <button onclick="showNewtopicForm()">Luo uusi keskustelunaihe</button>
+    <div id="newtopicform" style="display: none;">
+        <form action="/newtopic", method="POST">
+            <textarea name="newtopic" rows="1" cols="50"></textarea>
+            <input type="submit" value="Lähetä">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        </form>
+    </div>
+    <br>
+{% endif %}
 <br>
 
 <hr>
 {% block content%}{% endblock %}
 <hr>
+
+<script>
+    function showNewtopicForm() {
+        let e = document.getElementById("newtopicform");
+        if (e.style.display === "none") {
+            e.style.display = "block";
+        } else {
+            e.style.display = "none";
+        }
+
+    }
+</script>

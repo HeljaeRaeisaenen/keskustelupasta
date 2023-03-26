@@ -6,7 +6,7 @@ from .db import db
 def create_user(username, password):
     passwordhash = generate_password_hash(password)
     sql = text(
-        "INSERT INTO users (username,passwordhash) VALUES (:username,:passwordhash)")
+        "INSERT INTO users (username,passwordhash,admin) VALUES (:username,:passwordhash,false)")
     db.session.execute(
         sql, {"username": username, "passwordhash": passwordhash})
     db.session.commit()
@@ -36,11 +36,31 @@ def find_username(user_id):
 
 
 def find_user_id(username):
+    if not username:
+        return False
+
     result = db.session.execute(
-        text("SELECT id FROM users WHERE username=:username"), {"username": username})
+        text("SELECT id FROM users WHERE username=:username"),
+        {"username": username})
     user_id = result.fetchone()
 
     if not user_id:
         print('no user found')
         return None
     return user_id[0]
+
+
+def is_admin(username):
+    result = db.session.execute(
+        text("SELECT admin FROM users WHERE username=:username"),
+        {"username": username}
+    )
+    admin = result.fetchone()[0]
+    print(admin)
+    return admin
+
+def get_all():
+    result = db.session.execute(
+        text("SELECT username FROM users")
+    )
+    return result.fetchall()
