@@ -16,7 +16,7 @@ Poista keskustelunaiheita HUOM. tämä ei poista aiheiden viestejä eikä kommen
 
 Poista käyttäjiä, tämä ei poista käyttäjän luomia viestejä tai kommentteja <br>
 <form action="/deleteuser" method="POST" onsubmit="return areYouSure(this)">
-    <select name="todelete" id="topic">
+    <select name="todelete" id="user">
         {% for u in users%}
             <option value="{{ u.username }}">{{ u.username }}</option>
         {% endfor%}
@@ -25,6 +25,7 @@ Poista käyttäjiä, tämä ei poista käyttäjän luomia viestejä tai kommentt
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 <br>
+<a href="/">Takaisin etusivulle</a>
 
 <script>
     function areYouSure(form) {

@@ -26,6 +26,8 @@ def verify_user(username, password):
 
 
 def find_username(user_id):
+    if not user_id:
+        return None
     result = db.session.execute(
         text("SELECT username FROM users WHERE id=:id"), {"id": user_id})
     username = result.fetchone()
@@ -64,3 +66,11 @@ def get_all():
         text("SELECT username FROM users")
     )
     return result.fetchall()
+
+def delete(user):
+    db.session.execute(
+        text("UPDATE users SET username='deleted user', passwordhash='' WHERE username=:user"),
+        #text("DELETE FROM users WHERE username=:user"),
+        {"user":user}
+    )
+    db.session.commit()

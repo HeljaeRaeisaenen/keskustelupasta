@@ -98,8 +98,7 @@ def show_post(post_id):
 
 @app.route("/posts/<int:post_id>", methods=["POST"])
 def comment_post(post_id):
-    if session["csrf_token"] != request.form["csrf_token"]:
-        abort(403)
+    check_csrf(request.form["csrf_token"])
 
     user_id = users.find_user_id(session["username"])
     if not user_id:
@@ -119,8 +118,7 @@ def new_post():
 
 @app.route("/create", methods=["POST"])
 def create_post():
-    if session["csrf_token"] != request.form["csrf_token"]:
-        abort(403)
+    check_csrf(request.form["csrf_token"])
 
     found_user = users.find_user_id(session["username"])
     if not found_user:
@@ -142,10 +140,8 @@ def create_post():
 
 @app.route("/newtopic", methods=["POST"])
 def create_topic():
-    if session["csrf_token"] != request.form["csrf_token"]:
-        abort(403)
-    if not users.is_admin(session["username"]):
-        abort(403)
+    check_csrf(request.form["csrf_token"])
+    check_admin()
     print(request.form)
     topic = request.form["newtopic"]
     created = topics.create(topic)
@@ -153,22 +149,41 @@ def create_topic():
 
 @app.route("/adminpage")
 def adminpage():
-    if not users.is_admin(session["username"]):
-        abort(403)
+    check_admin()
     user_s = users.get_all()
     topic_s = topics.get_all()
     return render_template("adminpage.html", users=user_s, topics=topic_s)
 
 @app.route("/deleteuser", methods=["POST"])
 def delete_user():
-    pass
+    check_csrf(request.form["csrf_token"])
+    check_admin()
+
+    user = request.form["todelete"]
+    users.delete(user)
+    return redirect("/adminpage")
+
 
 @app.route("/deletetopic", methods=["POST"])
 def delete_topic():
-    pass
+    check_csrf(request.form["csrf_token"])
+    check_admin()
+
+    topic = request.form["todelete"]
+    topics.delete(topic)
+    return redirect("/adminpage")
+
 #################################################################
 # helpers
 def create_session(username):
     session["username"] = username
     session["user_id"] = users.find_user_id(username)  # useful??
     session["csrf_token"] = token_hex(16)
+
+def check_csrf(token):
+    if session["csrf_token"] != token:
+        abort(403)
+
+def check_admin():
+    if not users.is_admin(session["username"]):
+        abort(403)

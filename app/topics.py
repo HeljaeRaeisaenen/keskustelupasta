@@ -25,3 +25,10 @@ def create(topic):
     result = db.session.execute(sql, {"topic":topic})
     db.session.commit()
     return result.fetchone()[0]
+
+def delete(topic):
+    result = db.session.execute(
+        text("DELETE FROM topics WHERE topic=:topic"),
+        {"topic":topic}
+    )
+    db.session.commit()
