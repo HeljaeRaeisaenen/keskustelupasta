@@ -7,8 +7,15 @@
 
 <p>{{ post.message }}</p>
 <br>
+{% if session.username == post.username %}
+    <form action="/deletepost" method="POST" onsubmit="return areYouSure()">
+        <input type="submit" value="Poista keskustelu">
+        <input type="hidden" name="post_to_delete" value="{{ post.id }}">
+        <input type="hidden" name="to_redirect" value="/topics/{{ post.topic }}">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+{% endif %}
 <hr>
-
 {% if session.username %}
     <form action="/posts/{{ post.id }}" method="POST" onsubmit="return check(this)">
         <i>Kommentoi keskustelua</i> <br>
@@ -17,6 +24,7 @@
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
 {% endif %}
+
 <br>
 {% for comment in comments %}
     <hr>
@@ -24,6 +32,15 @@
     <br>
     <br>
     {{ comment.message }}
+    <br>
+    {% if comment.username == session.username %}
+        <form action="/deletecomment" method="POST" onsubmit="return areYouSureComm()">
+            <input type="submit" value="Poista">
+            <input type="hidden" name="comm_to_delete" value="{{ comment.id }}">
+            <input type="hidden" name="to_redirect" value="/posts/{{ post.id }}">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        </form>
+    {% endif %}
     <br>
     <br>
 
@@ -42,6 +59,13 @@
             return false;
         }
     return true;
+    }
+
+    function areYouSure(form) {
+        return confirm(`Haluatko varmasti poistaa tämän keskustelun? Keskustelua ei voi palauttaa poiston jälkeen.`)
+    }
+    function areYouSureComm(form) {
+        return confirm(`Haluatko varmasti poistaa kommenttisi? Sitä ei voi palauttaa poiston jälkeen.`)
     }
 </script>
 {% endblock %}

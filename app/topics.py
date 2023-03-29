@@ -20,15 +20,17 @@ def get_id(topic_name):
     result = db.session.execute(sql, {"topic": topic_name})
     return result.fetchone()[0]
 
+
 def create(topic):
     sql = text("INSERT INTO topics (topic) VALUES (:topic) RETURNING topic")
-    result = db.session.execute(sql, {"topic":topic})
+    result = db.session.execute(sql, {"topic": topic})
     db.session.commit()
     return result.fetchone()[0]
 
+
 def delete(topic):
-    result = db.session.execute(
+    db.session.execute(
         text("DELETE FROM topics WHERE topic=:topic"),
-        {"topic":topic}
+        {"topic": topic}
     )
     db.session.commit()

@@ -28,3 +28,9 @@ def get_all_posts(topic_id):
                "ON p.user_id=u.id WHERE p.topic_id=:id ORDER BY p.id DESC")
     result = db.session.execute(sql, {"id": topic_id})
     return result.fetchall()
+
+def delete(post_id):
+    db.session.execute(
+        text("DELETE FROM posts WHERE id=:id"),
+        {"id":post_id})
+    db.session.commit()

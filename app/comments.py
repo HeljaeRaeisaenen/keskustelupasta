@@ -11,9 +11,15 @@ def create_comment(user_id, post_id, comment):
     db.session.commit()
 
 
-def get_comments(comm_id):
-    sql = "SELECT C.message, C.time, U.username FROM comments C, users U WHERE C.post_id=:id "\
+def get_comments(post_id):
+    sql = "SELECT C.id, C.message, C.time, U.username FROM comments C, users U WHERE C.post_id=:id "\
         "AND C.user_id=U.id ORDER BY C.id"
-    result = db.session.execute(text(sql), {"id": comm_id})
+    result = db.session.execute(text(sql), {"id": post_id})
     comments = result.fetchall()
     return comments
+
+def delete(comm_id):
+    db.session.execute(
+        text("DELETE FROM comments WHERE id=:id"),
+        {"id":comm_id})
+    db.session.commit()

@@ -61,16 +61,18 @@ def is_admin(username):
     print(admin)
     return admin
 
+
 def get_all():
     result = db.session.execute(
         text("SELECT username FROM users")
     )
     return result.fetchall()
 
+
 def delete(user):
     db.session.execute(
         text("UPDATE users SET username='deleted user', passwordhash='' WHERE username=:user"),
-        #text("DELETE FROM users WHERE username=:user"),
-        {"user":user}
+        # text("DELETE FROM users WHERE username=:user"),
+        {"user": user}
     )
     db.session.commit()
