@@ -1,5 +1,5 @@
-from flask import render_template, request, redirect, session, abort
 from secrets import token_hex
+from flask import render_template, request, redirect, session, abort
 from .app import app
 from . import users
 from . import topics
@@ -11,11 +11,11 @@ from . import comments
 def index():
     topic_s = topics.get_all()
     topic_posts = {}
-    for t in topic_s:
-        if not t.max:
-            topic_posts[t.id] = None
+    for topic in topic_s:
+        if not topic.max:
+            topic_posts[topic.id] = None
         else:
-            topic_posts[t.id] = posts.get_post(t.max)
+            topic_posts[topic.id] = posts.get_post(topic.max)
     try:
         admin = users.is_admin(session["username"])
     except KeyError:
@@ -40,14 +40,13 @@ def loginaction():
         create_session(username)
 
         return redirect("/")
-    else:
-        return redirect("/")  # ERRORMESSAGE
+    return redirect("/")  # ERRORMESSAGE
 
 
 @app.route("/logout")
 def logout_action():
     del session["username"]
-    #del session["user_id"]
+    # del session["user_id"]
     del session["csrf_token"]
     return redirect("/")
 
@@ -66,7 +65,8 @@ def sing_up_action():
         return redirect("/signup")  # ERRORMESSAGE
 
     if users.find_user_id(username):
-        return render_template("create_user.html", error="username in use")  # ERRORMESSAGE
+        # ERRORMESSAGE
+        return render_template("create_user.html", error="username in use")
         # ugly but idk how to pass a parameter otherwise
 
     stripped = username.strip('\t ')
@@ -85,7 +85,6 @@ def sing_up_action():
 def show_topic(topic_name):
     topic_id = topics.get_id(topic_name)
     topic_posts = posts.get_all_posts(topic_id)
-    print(topic_posts)
     return render_template("topic.html",
                            topic=topic_name,
                            posts=topic_posts,
@@ -137,7 +136,7 @@ def create_post():
 
     if (len(title) > 75) or (not title.strip('\t ')):
         return redirect("/")  # ERRORMESSAGE
-    if (len(message) > 5000):
+    if len(message) > 5000:
         return redirect("/")  # ERRORMESSAGE
 
     post_id = posts.create_post(title, message, topic_id, found_user)
@@ -151,7 +150,7 @@ def create_topic():
     check_admin()
     topic = request.form["newtopic"]
     if not topic.strip('\t '):
-        redirect("/adminpage") # ERRORMESSAGE
+        redirect("/adminpage")  # ERRORMESSAGE
     created = topics.create(topic)
     return redirect(f"/topics/{created}")
 
@@ -185,11 +184,13 @@ def delete_topic():
     topics.delete(topic)
     return redirect("/adminpage")
 
+
 @app.route("/deletepost", methods=["POST"])
 def delete_post():
     check_csrf(request.form["csrf_token"])
     posts.delete(request.form["post_to_delete"])
     return redirect(request.form["to_redirect"])
+
 
 @app.route("/deletecomment", methods=["POST"])
 def delete_comment():
@@ -203,7 +204,7 @@ def delete_comment():
 
 def create_session(username):
     session["username"] = username
-    #session["user_id"] = users.find_user_id(username)  # useful??
+    # session["user_id"] = users.find_user_id(username)  # useful??
     session["csrf_token"] = token_hex(16)
 
 

@@ -24,7 +24,7 @@ def get_post(post_id):
 
 
 def get_all_posts(topic_id):
-    sql = text("SELECT p.title,p.time,p.id,u.username,c.message,c.time as comment_time FROM posts p "
+    sql = text("SELECT p.title,p.time,p.id,u.username,c.message,c.time as comm_time FROM posts p "
                "LEFT JOIN users u ON p.user_id=u.id FULL OUTER JOIN comments c ON p.id=c.post_id "
                "WHERE p.topic_id=:id AND (c.id = (select max(id) from comments) "
                "OR NOT EXISTS (select id from comments where post_id=p.id)) "
@@ -32,8 +32,9 @@ def get_all_posts(topic_id):
     result = db.session.execute(sql, {"id": topic_id})
     return result.fetchall()
 
+
 def delete(post_id):
     db.session.execute(
         text("DELETE FROM posts WHERE id=:id"),
-        {"id":post_id})
+        {"id": post_id})
     db.session.commit()

@@ -73,14 +73,14 @@ def delete(user):
     user_id = find_user_id(user)
     db.session.execute(
         text("UPDATE posts SET user_id=0 WHERE user_id=:user"),
-        {"user":user_id}
+        {"user": user_id}
     )
     # the idea is that users table, id 0 is reserved for deleted users and when a user is deleted
     # this "user" inherits their posts so the posts can remain but aren't tied to a username
-    # this is probably a bad way to do this but i wanted to 
+    # this is probably a bad way to do this but i wanted to
     db.session.execute(
         text("UPDATE comments SET user_id=0 WHERE user_id=:user"),
-        {"user":user_id}
+        {"user": user_id}
     )
     db.session.execute(
         # text("UPDATE users SET username='deleted user', passwordhash='' WHERE username=:user"),
