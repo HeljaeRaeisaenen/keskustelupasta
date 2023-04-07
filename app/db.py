@@ -1,12 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
-#from dotenv import dotenv_values
-from os import getenv
+from dotenv import dotenv_values
 from .app import app
 
-# todo
-URI = getenv['DATABASE_URL']
+URI = dotenv_values('.env')['DATABASE_URI']
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = URI
-
-app.config["SQLALCHEMY_DATABASE_URI"] = URI.replace("://", "ql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = URI
 db = SQLAlchemy(app)

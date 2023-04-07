@@ -4,10 +4,6 @@ CREATE TABLE users (
 	passwordhash TEXT, 
 	admin BOOLEAN);
 
-CREATE TABLE topics (
-        id SERIAL PRIMARY KEY,
-        topic TEXT UNIQUE);
-
 CREATE TABLE posts (
 	id SERIAL PRIMARY KEY, 
 	title TEXT, message TEXT, 
@@ -21,4 +17,8 @@ CREATE TABLE comments (
 	time TIMESTAMP, 
 	user_id INTEGER REFERENCES users ON DELETE CASCADE, 
 	post_id INTEGER REFERENCES posts ON DELETE CASCADE);
+
+CREATE TABLE topics (
+	id SERIAL PRIMARY KEY, 
+	topic TEXT UNIQUE);
 
