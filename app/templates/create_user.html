@@ -2,13 +2,6 @@
 {% block title %}Uusi käyttäjä{% endblock %}
 {% block content %}
 
-{% if error %}
-    {% if error == "username in use" %}
-        <b>Käyttäjänimi on jo käytössä</b>
-        <br>
-    {% endif %}
-{% endif %}
-
 <form action="/signup" method="POST" onsubmit="return check(this)">
     Käyttäjätunnus:
     <input type="text" name="username">
@@ -27,11 +20,11 @@
 
 <script>
     function check(form) {
-        if (!form.username.value.trim()) {
+        if (!form.username.value) {
             alert("Käyttäjätunnus ei saa olla tyhjä");
             return false;
         }
-        if (!form.password.value.trim()) {
+        if (!form.password.value) {
             alert("Salasana ei saa olla tyhjä");
             return false;
         }

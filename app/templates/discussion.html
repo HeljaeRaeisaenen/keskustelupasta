@@ -23,8 +23,6 @@
         <input type="submit" value="Lähetä">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
-{% else %}
-    <p><i>Kirjaudu sisään kommentoidaksesi keskustelua.</i></p>
 {% endif %}
 
 <br>
@@ -35,7 +33,6 @@
     <br>
     {{ comment.message }}
     <br>
-    <br>
     {% if comment.username == session.username %}
         <form action="/deletecomment" method="POST" onsubmit="return areYouSureComm()">
             <input type="submit" value="Poista">
@@ -44,6 +41,8 @@
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
     {% endif %}
+    <br>
+    <br>
 
 {% endfor %}
 <hr>
@@ -57,7 +56,6 @@
             return false;
         }
         if(!form.comment.value) {
-            alert("Viesti ei saa olla tyhjä");
             return false;
         }
     return true;
