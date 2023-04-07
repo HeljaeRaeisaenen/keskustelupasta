@@ -6,10 +6,10 @@
 
 <form action="/create" method="POST" onsubmit="return check(this)">
     Otsikko: <br>
-    <textarea name="title" rows="1" cols="50"></textarea>
+    <textarea name="title" rows="1" cols="50" required></textarea>
     <br>
     Aihealue: <br>
-    <select name="topic" id="topic">
+    <select name="topic" id="topic" required>
         {% for t in topics%}
             <option value="{{ t.topic }}">{{ t.topic }}</option>
         {% endfor%}
@@ -18,7 +18,7 @@
     Viesti: <br>
     <textarea name="message" rows="5" cols="50"></textarea>
     <br>
-    <input type="submit" value="Lähetä">
+    <input type="submit" class="btn btn-primary" value="Lähetä">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 
@@ -40,8 +40,8 @@
             alert("Aihealue on pakollinen")
             return false;
         }
-        if (!form.title.value) {
-            alert("Otsikko on pakollinen");
+        if (!form.title.value.trim()) {
+            alert("Otsikko ei saa olla tyhjä");
             return false;
         }
     return true;

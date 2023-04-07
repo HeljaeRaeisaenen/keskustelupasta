@@ -85,6 +85,7 @@ def sing_up_action():
 def show_topic(topic_name):
     topic_id = topics.get_id(topic_name)
     topic_posts = posts.get_all_posts(topic_id)
+    print(topic_posts)
     return render_template("topic.html",
                            topic=topic_name,
                            posts=topic_posts,
@@ -129,7 +130,7 @@ def create_post():
 
     found_user = users.find_user_id(session["username"])
     if not found_user:
-        return redirect("/")  # ERRORMESSAGE
+        abort(403)
     title = request.form["title"]
     message = request.form["message"]
     topic_id = topics.get_id(request.form["topic"])
@@ -148,8 +149,9 @@ def create_post():
 def create_topic():
     check_csrf(request.form["csrf_token"])
     check_admin()
-    print(request.form)
     topic = request.form["newtopic"]
+    if not topic.strip('\t '):
+        redirect("/adminpage") # ERRORMESSAGE
     created = topics.create(topic)
     return redirect(f"/topics/{created}")
 
@@ -168,6 +170,8 @@ def delete_user():
     check_admin()
 
     user = request.form["todelete"]
+    if user == 'deleted user':
+        abort(403)
     users.delete(user)
     return redirect("/adminpage")
 

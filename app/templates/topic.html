@@ -7,7 +7,11 @@
     <a href="/posts/{{ post.id }}"><h2>{{ post.title }}</h2></a>
     <p>Käyttäjältä {{ post.username }}</p>
     <p>Luotu {{ post.time.strftime("%d.%m.%Y %H:%M") }} </p> 
-    <p>Viimeisin viesti ... </p> <!--TODO-->
+    {% if post.message %}
+        <p>Viimeisin viesti lähetetty {{ post.comment_time.strftime("%d.%m.%Y %H:%M") }}: <i>"{{ post.message }}"</i> </p>
+    {% else %}
+        <p>Keskustelussa ei vielä ole vastauksia.</p>
+    {% endif %}
 {% endfor %}
 
 <br>

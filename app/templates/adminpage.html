@@ -9,7 +9,7 @@ Poista keskustelunaiheita HUOM. tämä ei poista aiheiden viestejä eikä kommen
             <option value="{{ t.topic }}">{{ t.topic }}</option>
         {% endfor%}
     </select>
-    <input type="submit" value="Poista">
+    <input type="submit" class="btn btn-primary" value="Poista">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 <br>
@@ -17,11 +17,13 @@ Poista keskustelunaiheita HUOM. tämä ei poista aiheiden viestejä eikä kommen
 Poista käyttäjiä, tämä ei poista käyttäjän luomia viestejä tai kommentteja <br>
 <form action="/deleteuser" method="POST" onsubmit="return areYouSure(this)">
     <select name="todelete" id="user">
-        {% for u in users%}
-            <option value="{{ u.username }}">{{ u.username }}</option>
-        {% endfor%}
+        {% for u in users %}
+            {% if u.username != session.username and u.username != 'deleted user' %}
+                <option value="{{ u.username }}">{{ u.username }}</option>
+            {% endif %}
+        {% endfor %}
     </select>
-    <input type="submit" value="Poista">
+    <input type="submit" class="btn btn-primary" value="Poista">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 <br>

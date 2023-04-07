@@ -1,35 +1,58 @@
 <!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 
 <title>Keskustelupalsta - {% block title %}{% endblock %}</title>
-<h1>Keskustelupasta</h1>
+<div class="container">
 
-{% if session.username %}
-    <p>Kirjautuneena sisään: {{ session.username }}
-    <a href="/logout">Kirjaudu ulos</a></p>
-    <a href="/new"></b>Luo keskustelu</b></a>
-{% else %}
-    <a href="/login">Kirjaudu sisään</a> tai <a href="/signup">luo uusi käyttäjätunnus</a>
-{% endif %}
-{% if user_is_admin %}
-    <hr>
-    <a href="/adminpage" class="button">Hallinnoi sivustoa</a> <!--TODO button-->
-    <hr>
+    <h1>Keskustelupasta</h1>
 
-    <button onclick="showNewtopicForm()">Luo uusi keskustelunaihe</button>
-    <div id="newtopicform" style="display: none;">
-        <form action="/newtopic", method="POST">
-            <textarea name="newtopic" rows="1" cols="50"></textarea>
-            <input type="submit" value="Lähetä">
-            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        </form>
-    </div>
+    <nav class="navbar navbar-expand-sm navbar-light">
+        <a class="navbar-brand" href="/">Paikka keskusteluille</a>
+        <ul class="navbar-nav">
+            {% if session.username %}
+                <li class="nav-item">
+                    <p>Kirjautuneena sisään: {{ session.username }}</p>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Kirjaudu ulos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/new"></b>Luo keskustelu</b></a>
+                </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Kirjaudu sisään</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/signup">luo uusi käyttäjätunnus</a>
+            </li>
+        {% endif %}
+    
+        </ul>
+      </nav>
+
+    
+    {% if user_is_admin %}
+        <hr>
+        <a href="/adminpage" class="btn btn-primary">Hallinnoi sivustoa</a> <!--TODO button-->
+        <hr>
+
+        <button class="btn btn-primary" onclick="showNewtopicForm()">Luo uusi keskustelunaihe</button>
+        <div id="newtopicform" style="display: none;">
+            <form action="/newtopic", method="POST">
+                <textarea name="newtopic" rows="1" cols="50" required></textarea>
+                <input type="submit" class="btn btn-primary" value="Lähetä">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            </form>
+        </div>
+        <br>
+    {% endif %}
     <br>
-{% endif %}
-<br>
 
-<hr>
-{% block content%}{% endblock %}
+    <hr>
+        {% block content%}{% endblock %}
+</div>
 <hr>
 
 <script>
