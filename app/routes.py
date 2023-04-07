@@ -66,9 +66,11 @@ def sing_up_action():
         return redirect("/signup")  # ERRORMESSAGE
 
     if users.find_user_id(username):
-        return redirect("/signup")  # ERRORMESSAGE
-    
-    if not username.strip('\t '):
+        return render_template("create_user.html", error="username in use")  # ERRORMESSAGE
+        # ugly but idk how to pass a parameter otherwise
+
+    stripped = username.strip('\t ')
+    if (not stripped) or (stripped == "deleted user"):
         return redirect("/signup")  # ERRORMESSAGE
 
     users.create_user(username, password)
