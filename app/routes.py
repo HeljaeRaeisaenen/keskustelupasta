@@ -198,6 +198,32 @@ def delete_comment():
     comments.delete(request.form["comm_to_delete"])
     return redirect(request.form["to_redirect"])
 
+@app.route("/search")
+def search_site():
+    return render_template("search_page.html")
+
+@app.route("/search", methods=["POST"])
+def search_site_result():
+    result = []
+    search_items = request.form["search_items"]
+    keyword = request.form["keyword"]
+    if search_items == "topics":
+        result += topics.search(keyword)
+    elif search_items == "posts":
+        result += posts.search(keyword)
+    elif search_items == "users":
+        result += users.search(keyword)
+    else: 
+        result += topics.search(keyword)
+        result += posts.search(keyword)
+        result += users.search(keyword)
+    
+    print(result)
+    if len(result) == 0:
+        result.append({"name":"Mitään ei löytynyt"})
+        
+    return render_template("search_page.html", result=result)
+
 #################################################################
 # helpers
 

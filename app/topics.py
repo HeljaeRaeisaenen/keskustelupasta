@@ -29,3 +29,15 @@ def delete(topic):
         {"topic": topic}
     )
     db.session.commit()
+
+def search(key):
+    result = db.session.execute(
+        text("SELECT topic FROM topics WHERE topic LIKE :key"),
+        {"key": f"%{key}%"}
+    )
+    result = result.fetchall()
+    unified_result = []
+    for row in result:
+        unified_result.append( {"name":row.topic, "link": f"/topics/{row.topic}"} )
+    
+    return unified_result

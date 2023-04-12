@@ -21,21 +21,24 @@
                     <a class="nav-link" href="/new"></b>Luo keskustelu</b></a>
                 </li>
             {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Kirjaudu sisään</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/signup">luo uusi käyttäjätunnus</a>
+                </li>
+            {% endif %}
             <li class="nav-item">
-                <a class="nav-link" href="/login">Kirjaudu sisään</a>
+                <a class="nav-link" href="/search">Hae</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/signup">luo uusi käyttäjätunnus</a>
-            </li>
-        {% endif %}
-    
+        
         </ul>
       </nav>
 
     
     {% if user_is_admin %}
         <hr>
-        <a href="/adminpage" class="btn btn-primary">Hallinnoi sivustoa</a> <!--TODO button-->
+        <a href="/adminpage" class="btn btn-primary">Hallinnoi sivustoa</a>
         <hr>
 
         <button class="btn btn-primary" onclick="showNewtopicForm()">Luo uusi keskustelunaihe</button>

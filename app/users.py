@@ -88,3 +88,16 @@ def delete(user):
         {"user": user}
     )
     db.session.commit()
+
+def search(key):
+    result = db.session.execute(
+        text("SELECT username FROM users WHERE username LIKE :key"),
+        {"key": f"%{key}%"}
+    )
+    result = result.fetchall()
+
+    unified_result = []
+    for row in result:
+        unified_result.append( {"name":row.username,"link":""} )
+    
+    return unified_result

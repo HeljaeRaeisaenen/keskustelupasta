@@ -12,17 +12,17 @@
 <form action="/signup" method="POST" onsubmit="return check(this)">
     <div class="form-group col-4">
         <label for="username">Käyttäjätunnus:</label>
-        <input type="text" class="form-control" name="username" required>
+        <input type="text" class="form-control" name="username" maxlength="20" minlength="3" required>
         <small id="passwordHelp" class="form-text text-muted">Käyttäjätunnuksen tulee olla vähintään 3 merkkiä.</small>
     </div>
     <div class="form-group col-4">
         <label for="inputPassword">Salasana:</label>
-        <input type="password" class="form-control" name="password" required>
+        <input type="password" class="form-control" name="password" minlength="4" required>
         <small id="passwordHelp" class="form-text text-muted">Salasanan tulee olla väh. 4 merkkiä ja sen kannattaa sisältää numeroita ja erikoismerkkejä.</small>
     </div>
     <div class="form-group col-4">
         <label for="inputPassword">Vahvista salasana:</label>
-        <input type="password" class="form-control" name="password_again" required>
+        <input type="password" class="form-control" name="password_again" minlength="4" required>
     </div>
     <div class="form-group col-4">
         <button type="submit" class="btn btn-primary">Luo käyttäjä</button>
@@ -34,6 +34,7 @@
 
 <script>
     function check(form) {
+        /*
         if (form.username.value.trim().length < 3) {
             alert("Käyttäjätunnus on liian lyhyt");
             return false;
@@ -41,7 +42,7 @@
         if (form.password.value.trim().length <= 3) {
             alert("Salasana on liian lyhyt");
             return false;
-        }
+        }*/
         if (form.password.value !== form.password_again.value) {
             alert("Salasanat eivät olleet samat");
             return false;

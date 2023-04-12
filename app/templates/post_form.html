@@ -6,7 +6,7 @@
 
 <form action="/create" method="POST" onsubmit="return check(this)">
     Otsikko: <br>
-    <textarea name="title" rows="1" cols="50" required></textarea>
+    <textarea name="title" rows="1" cols="50" maxlength="75" required></textarea>
     <br>
     Aihealue: <br>
     <select name="topic" id="topic" required>
@@ -16,7 +16,7 @@
     </select> <br>
     
     Viesti: <br>
-    <textarea name="message" rows="5" cols="50"></textarea>
+    <textarea name="message" rows="5" cols="50" maxlength="5000"></textarea>
     <br>
     <input type="submit" class="btn btn-primary" value="Lähetä">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
