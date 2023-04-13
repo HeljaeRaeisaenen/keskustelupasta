@@ -98,6 +98,6 @@ def search(key):
 
     unified_result = []
     for row in result:
-        unified_result.append( {"name":row.username} )
+        unified_result.append( {"name":row.username + " (käyttäjä)"} )
     
     return unified_result

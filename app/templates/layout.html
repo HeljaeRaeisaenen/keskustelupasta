@@ -1,6 +1,10 @@
 <!doctype html>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
 
 <title>Keskustelupalsta - {% block title %}{% endblock %}</title>
 <div class="container">
@@ -33,14 +37,14 @@
             </li>
         
         </ul>
-      </nav>
-
+    </nav>
+    <header class="page-header header container-fluid">
+    <div class="overlay"></div>
+    <div class="text-content" >
     
     {% if user_is_admin %}
         <hr>
         <a href="/adminpage" class="btn btn-primary">Hallinnoi sivustoa</a>
-        <hr>
-
         <button class="btn btn-primary" onclick="showNewtopicForm()">Luo uusi keskustelunaihe</button>
         <div id="newtopicform" style="display: none;">
             <form action="/newtopic", method="POST">
@@ -53,10 +57,17 @@
     {% endif %}
     <br>
 
-    <hr>
-        {% block content%}{% endblock %}
-</div>
+    {% block content%}{% endblock %}
 <hr>
+</div>
+</header>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        kakakakakakakakakkak
+    </div>
+</footer>
 
 <script>
     function showNewtopicForm() {
@@ -68,4 +79,11 @@
         }
 
     }
+    let ready = (callback) => {
+    if (document.readyState != "loading") callback();
+    else document.addEventListener("DOMContentLoaded", callback);
+    }
+    ready(() => {
+        document.querySelector(".header").style.height = window.innerHeight + "px";
+    })
 </script>
