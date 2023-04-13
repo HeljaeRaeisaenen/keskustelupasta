@@ -5,12 +5,12 @@
 
 {% for post in posts %}
     <a href="/posts/{{ post.id }}"><h2>{{ post.title }}</h2></a>
-    <p>Käyttäjältä {{ post.username }}</p>
-    <p>Luotu {{ post.time.strftime("%d.%m.%Y %H:%M") }} </p> 
+    <p><i>Käyttäjältä</i> {{ post.username }}</p>
+    <p><i>Luotu {{ post.time.strftime("%d.%m.%Y %H:%M") }}</i> </p> 
     {% if post.message %}
-        <p>Viimeisin viesti lähetetty {{ post.comm_time.strftime("%d.%m.%Y %H:%M") }}: <i>"{{ post.message }}"</i> </p>
+        <p><i>Viimeisin viesti lähetetty {{ post.comm_time.strftime("%d.%m.%Y %H:%M") }}:</i> "{{ post.message }}" </p>
     {% else %}
-        <p>Keskustelussa ei vielä ole vastauksia.</p>
+        <p><i>Keskustelussa ei vielä ole vastauksia.</i></p>
     {% endif %}
 {% endfor %}
 
