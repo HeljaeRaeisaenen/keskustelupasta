@@ -7,10 +7,10 @@ Hae sivustolta:
 <form action="/search" method="POST">
     <textarea name="keyword" rows="1" cols="50" maxlength="50" required></textarea>
     <select name="search_items" id="user">
+        <option value="all">kaikki</option>
         <option value="topics">keskustelunaiheet</option>
         <option value="posts">keskustelut</option>
         <option value="users">käyttäjät</option>
-        <option value="all">kaikki</option>
     </select>
     <input type="submit" class="btn btn-primary" value="Hae">
 </form>

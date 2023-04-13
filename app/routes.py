@@ -85,7 +85,7 @@ def sing_up_action():
 def show_topic(topic_name):
     topic_id = topics.get_id(topic_name)
     topic_posts = posts.get_all_posts(topic_id)
-    print(topic_posts)
+    #print(topic_posts)
     return render_template("topic.html",
                            topic=topic_name,
                            posts=topic_posts,
@@ -96,10 +96,12 @@ def show_topic(topic_name):
 def show_post(post_id):
     post = posts.get_post(post_id)
     post_comments = comments.get_comments(post_id)
+
     return render_template("discussion.html",
                            post=post,
                            comments=post_comments,
-                           session=session)
+                           session=session,
+                           user_is_admin=check_admin())
 
 
 @app.route("/posts/<int:post_id>", methods=["POST"])
@@ -148,7 +150,8 @@ def create_post():
 @app.route("/newtopic", methods=["POST"])
 def create_topic():
     check_csrf(request.form["csrf_token"])
-    check_admin()
+    if not check_admin():
+        abort(403)
     topic = request.form["newtopic"]
     if not topic.strip('\t '):
         redirect("/adminpage")  # ERRORMESSAGE
@@ -158,7 +161,8 @@ def create_topic():
 
 @app.route("/adminpage")
 def adminpage():
-    check_admin()
+    if not check_admin():
+        abort(403)
     user_s = users.get_all()
     topic_s = topics.get_all()
     return render_template("adminpage.html", users=user_s, topics=topic_s)
@@ -167,7 +171,8 @@ def adminpage():
 @app.route("/deleteuser", methods=["POST"])
 def delete_user():
     check_csrf(request.form["csrf_token"])
-    check_admin()
+    if not check_admin():
+        abort(403)
 
     user = request.form["todelete"]
     if user == 'deleted user':
@@ -179,7 +184,8 @@ def delete_user():
 @app.route("/deletetopic", methods=["POST"])
 def delete_topic():
     check_csrf(request.form["csrf_token"])
-    check_admin()
+    if not check_admin():
+        abort(403)
 
     topic = request.form["todelete"]
     topics.delete(topic)
@@ -241,5 +247,8 @@ def check_csrf(token):
 
 
 def check_admin():
-    if not users.is_admin(session["username"]):
-        abort(403)
+    if len(session) == 0:
+        return False
+    if users.is_admin(session["username"]):
+        return True
+    return False
