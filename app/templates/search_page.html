@@ -12,13 +12,12 @@
         <option value="posts">keskustelut</option>
         <option value="users">käyttäjät</option>
     </select>
-    <input type="submit" class="btn btn-primary" value="Hae">
+    <input type="submit" class="button" value="Hae">
 </form>
 
-<h4>Hakutulokset:</h4>
 
 {% if result %}
-
+    <h4>Hakutulokset:</h4>
     {% for row in result %}
         <br>
         <h3>

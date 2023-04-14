@@ -8,6 +8,12 @@ body {
     position: relative;
     overflow: visible;
 }
+a {
+    color: #a5432b;
+}
+.title {
+    padding: 20px;
+}
 .navbar {
     background:#7d8664;
 }
@@ -25,20 +31,50 @@ body {
 .navbar-collapse {
     justify-content: flex-end;
 }
-.header {
+.container {
     position: relative;
-    overflow-y: scroll;
+    overflow-y: visible;
     height: 900px;
     min-height: 100%;
     min-width: 100%;
     left: 0;
     top: 0;
-    background: rgba(255, 255, 255, 0.8);
+    
 }
 .text-content {
+    background: rgba(255, 255, 255, 0.6);
     position: relative;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 20px;
     color: #000;
 }
+.button {
+    background-color: #bd903d;
+    color: #fff;
+    text-align: center;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 15px;
+    font-size: medium;
+}
+.button:hover {
+    background-color: #9e7833;
+    transition: 0.5s;
+    color: #fff;
+
+}
+.button:focus {
+    outline-color: transparent;
+    outline-style:solid;
+    box-shadow: 0 0 0 4px #775d2c;
+}
 .footer {
+    position: fixed;
+    text-align: center;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
     background: #bd903d;    
 }

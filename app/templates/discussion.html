@@ -9,7 +9,7 @@
 <br>
 {% if (session.username == post.username) or user_is_admin %}
     <form action="/deletepost" method="POST" onsubmit="return areYouSure()">
-        <input type="submit" class="btn btn-primary" value="Poista keskustelu">
+        <input type="submit" class="button" value="Poista keskustelu">
         <input type="hidden" name="post_to_delete" value="{{ post.id }}">
         <input type="hidden" name="to_redirect" value="/topics/{{ post.topic }}">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
@@ -20,7 +20,7 @@
     <form action="/posts/{{ post.id }}" method="POST" onsubmit="return check(this)">
         <i>Kommentoi keskustelua</i> <br>
         <textarea name="comment" rows="5" cols="50" maxlength="5000"></textarea>
-        <input type="submit" class="btn btn-primary" value="Lähetä">
+        <input type="submit" class="button" value="Lähetä">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
 {% else %}
@@ -37,7 +37,7 @@
     <br>
     {% if (comment.username == session.username) or user_is_admin %}
         <form action="/deletecomment" method="POST" onsubmit="return areYouSureComm()">
-            <input type="submit" class="btn btn-primary" value="Poista kommentti">
+            <input type="submit" class="button" value="Poista kommentti">
             <input type="hidden" name="comm_to_delete" value="{{ comment.id }}">
             <input type="hidden" name="to_redirect" value="/posts/{{ post.id }}">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">

@@ -9,7 +9,7 @@ Poista keskustelunaiheita HUOM. tämä ei poista aiheiden viestejä eikä kommen
             <option value="{{ t.topic }}">{{ t.topic }}</option>
         {% endfor%}
     </select>
-    <input type="submit" class="btn btn-primary" value="Poista">
+    <input type="submit" class="button" value="Poista">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 <br>
@@ -23,7 +23,7 @@ Poista käyttäjiä, tämä ei poista käyttäjän luomia viestejä tai kommentt
             {% endif %}
         {% endfor %}
     </select>
-    <input type="submit" class="btn btn-primary" value="Poista">
+    <input type="submit" class="button" value="Poista">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 <br>

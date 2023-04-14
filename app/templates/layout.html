@@ -8,9 +8,9 @@
 
 <title>Keskustelupalsta - {% block title %}{% endblock %}</title>
 <div class="container">
-
-    <h1>Keskustelupasta</h1>
-
+    <div class="title container-fluid">
+        <h1>Keskustelupasta</h1>
+    </div>
     <nav class="navbar navbar-expand-sm navbar-light">
         <a class="navbar-brand" href="/">Etusivu</a>
         <ul class="navbar-nav">
@@ -38,18 +38,17 @@
         
         </ul>
     </nav>
-    <header class="page-header header container-fluid">
-    
+    <div class="container container-fluid">
     <div class="text-content" >
     
     {% if user_is_admin %}
         <hr>
-        <a href="/adminpage" class="btn btn-primary">Hallinnoi sivustoa</a>
-        <button class="btn btn-primary" onclick="showNewtopicForm()">Luo uusi keskustelunaihe</button>
+        <a href="/adminpage" class="btn button">Hallinnoi sivustoa</a>
+        <button class="button" onclick="showNewtopicForm()">Luo uusi keskustelunaihe</button>
         <div id="newtopicform" style="display: none;">
             <form action="/newtopic", method="POST">
                 <textarea name="newtopic" rows="1" cols="50" required></textarea>
-                <input type="submit" class="btn btn-primary" value="Lähetä">
+                <input type="submit" class="button" value="Lähetä">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
         </div>
@@ -59,11 +58,11 @@
 
     {% block content%}{% endblock %}
 </div>
-</header>
+</div>
 </div>
 
 <footer class="footer">
-    <div class="container">
+    <div>
         Kuva: Carlos Lopes from Uberaba-MG, Brasil, <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a>, via Wikimedia Commons
     </div>
 </footer>
