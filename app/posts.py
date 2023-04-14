@@ -50,3 +50,11 @@ def search(key):
         unified_result.append( {"name":row.title, "link":f"/posts/{row.id}"} ) #TODO works?
     
     return unified_result
+
+def get_by_user(user_id):
+    result = db.session.execute(
+        text("SELECT p.title, p.time, p.message, p.id, t.topic FROM posts p LEFT JOIN topics t ON "
+             "t.id = p.topic_id WHERE p.user_id=:id ORDER BY p.id DESC"),
+        {"id":user_id}
+    )
+    return result.fetchall()

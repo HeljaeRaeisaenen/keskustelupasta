@@ -11,6 +11,9 @@ body {
 a {
     color: #a5432b;
 }
+textarea {
+    resize: none;
+}
 .title {
     padding: 20px;
 }

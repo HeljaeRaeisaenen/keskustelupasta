@@ -167,6 +167,15 @@ def adminpage():
     topic_s = topics.get_all()
     return render_template("adminpage.html", users=user_s, topics=topic_s)
 
+@app.route("/user/<username>")
+def userpage(username):
+    if not session:
+        return render_template("user_page.html", not_logged_in=True)
+    user_posts = posts.get_by_user(users.find_user_id(username))
+    return render_template("user_page.html",
+                            user_posts=user_posts,
+                            username=username)
+
 
 @app.route("/deleteuser", methods=["POST"])
 def delete_user():
@@ -225,7 +234,7 @@ def search_site_result():
         result += posts.search(keyword)
         result += users.search(keyword)
     
-    print(result)
+    #print(result)
     if len(result) == 0:
         result.append({"name":"Mitään ei löytynyt"})
         

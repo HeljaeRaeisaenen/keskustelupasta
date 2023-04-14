@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}{{ topic }}{% endblock %}
+{% block content %}
+
+{% if not_logged_in %}
+    <i>Kirjaudu sisään katsellaksesi käyttäjien tietoja.</i>
+{% else %}
+
+    <h2> {{ username }} </h2>
+    <hr>
+    <h3>Käyttäjän keskustelut:</h3>
+    {% for p in user_posts %}
+        <a href="/posts/{{ p.id }}"><h3>{{ p.title }}</h3></a>
+        <p><i>Luotu {{ p.time.strftime("%d.%m.%Y %H:%M") }}</i> <i>alueella </i>
+            <a href="/topics/{{ p.topic }}">{{ p.topic }}</a></p>
+        <p>{{ p.message }}</p>
+        <hr>
+
+    {% endfor %}
+
+    {% if not user_posts %}
+        <i>Käyttäjä {{ username }} ei ole vielä luonut keskusteluja.</i>
+    {% endif %}
+
+
+
+
+{% endif %}
+{% endblock %}

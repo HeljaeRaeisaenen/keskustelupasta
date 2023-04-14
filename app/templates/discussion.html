@@ -3,7 +3,7 @@
 {% block content %}
 
 <h3>{{ post.title }}</h3>
-<h6><i>Luonut</i> {{ post.username }} <i>aikaan</i> {{ post.time.strftime("%d.%m.%Y %H:%M") }}</h6>
+<h6><i>Luonut</i> <a href="/user/{{post.username}}">{{ post.username }}</a> <i>aikaan</i> {{ post.time.strftime("%d.%m.%Y %H:%M") }}</h6>
 
 <p>{{ post.message }}</p>
 <br>
