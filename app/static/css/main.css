@@ -2,7 +2,7 @@ body {
     padding: 0;
     margin: 0;
     
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/6/6a/La_Pasta_-_Uberaba_%287794990926%29.jpg');
+    background-image: url('../images/La_Pasta_-_Uberaba.jpg');
     background-size: cover;
     background-position: center;
     position: relative;

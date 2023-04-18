@@ -22,4 +22,4 @@ CREATE TABLE comments (
 	user_id INTEGER REFERENCES users ON DELETE CASCADE, 
 	post_id INTEGER REFERENCES posts ON DELETE CASCADE);
 
-INSERT INTO users (username, passwordhash, admin) VALUES ('deleted user','',0);
+INSERT INTO users (username, passwordhash, admin) VALUES ('deleted user','','0');
