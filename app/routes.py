@@ -47,8 +47,7 @@ def loginaction():
 
 @app.route("/logout")
 def logout_action():
-    del session["username"]
-    del session["csrf_token"]
+    remove_session()
     return redirect("/")
 
 
@@ -71,7 +70,7 @@ def sing_up_action():
         return redirect("/signup")
 
     stripped = username.strip('\t ')
-    if (not stripped):
+    if not stripped:
         flash("Käyttäjänimi ei saa olla tyhjä")
         return redirect("/signup")
 
@@ -108,16 +107,17 @@ def comment_post(post_id):
     check_csrf(request.form["csrf_token"])
 
     user_id = users.find_user_id(session["username"])
-    if not user_id: # commenting user doesn't exist
+    if not user_id:  # commenting user doesn't exist
         abort(403)
     comment = request.form["comment"]
-    comment = re.sub(r'\r\n', '', comment) # this is because html and python disagree on string len
+    # this is because html and python disagree on string len
+    comment = re.sub(r'\r\n', '', comment)
     if len(comment) > 5000:
         flash(f"Kommentti oli liian pitkä :( {len(comment)}")
         return redirect(f"/posts/{post_id}")
     if not comment.strip(" \t"):
         flash("Kommentti ei saa olla tyhjä")
-        return redirect(f"/posts/{post_id}") 
+        return redirect(f"/posts/{post_id}")
     comments.create_comment(user_id, post_id, comment)
     return redirect(f"/posts/{post_id}")
 
@@ -176,23 +176,31 @@ def adminpage():
     topic_s = topics.get_all()
     return render_template("adminpage.html", users=user_s, topics=topic_s)
 
+
 @app.route("/user/<username>")
 def userpage(username):
     if not session:
         return render_template("user_page.html", not_logged_in=True)
+    if username == "deleted user":
+        abort(404)
     user_posts = posts.get_by_user(users.find_user_id(username))
     return render_template("user_page.html",
-                            user_posts=user_posts,
-                            username=username)
+                           user_posts=user_posts,
+                           username=username)
 
 
 @app.route("/deleteuser", methods=["POST"])
 def delete_user():
     check_csrf(request.form["csrf_token"])
+    user = request.form["todelete"]
+
+    if user == session["username"]:
+        remove_session()
+        users.delete(user)
+        return redirect("/")
     if not check_admin():
         abort(403)
 
-    user = request.form["todelete"]
     if user == 'deleted user':
         abort(403)
     users.delete(user)
@@ -223,9 +231,11 @@ def delete_comment():
     comments.delete(request.form["comm_to_delete"])
     return redirect(request.form["to_redirect"])
 
+
 @app.route("/search")
 def search_site():
     return render_template("search_page.html")
+
 
 @app.route("/search", methods=["POST"])
 def search_site_result():
@@ -238,14 +248,14 @@ def search_site_result():
         result += posts.search(keyword)
     elif search_items == "users":
         result += users.search(keyword)
-    else: 
+    else:
         result += topics.search(keyword)
         result += posts.search(keyword)
         result += users.search(keyword)
-    
+
     if len(result) == 0:
-        result.append({"name":"Mitään ei löytynyt"})
-        
+        result.append({"name": "Mitään ei löytynyt"})
+
     return render_template("search_page.html", result=result)
 
 #################################################################
@@ -256,6 +266,9 @@ def create_session(username):
     session["username"] = username
     session["csrf_token"] = token_hex(16)
 
+def remove_session():
+    del session["username"]
+    del session["csrf_token"]
 
 def check_csrf(token):
     if session["csrf_token"] != token:

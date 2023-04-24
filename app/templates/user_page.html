@@ -7,6 +7,15 @@
 {% else %}
 
     <h2> {{ username }} </h2>
+    
+    {% if session.username == username %}
+    <form action="/deleteuser" method="POST" onsubmit="return areYouSure(this)">
+        <input type="hidden" name="todelete" value="{{username}}">
+        <input type="submit" class="button" value="Poista">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+    {% endif %}
+    
     <hr>
     <h3>Käyttäjän keskustelut:</h3>
     {% for p in user_posts %}
@@ -22,8 +31,11 @@
         <i>Käyttäjä {{ username }} ei ole vielä luonut keskusteluja.</i>
     {% endif %}
 
-
-
-
 {% endif %}
 {% endblock %}
+
+<script>
+    function areYouSure(form) {
+        return confirm("Haluatko varmasti poistaa käyttäjätilisi? Et voi saada sitä enää takaisin.")
+    }
+</script>

@@ -39,6 +39,7 @@ def delete(post_id):
         {"id": post_id})
     db.session.commit()
 
+
 def search(key):
     result = db.session.execute(
         text("SELECT title, id FROM posts WHERE (title LIKE :key) OR (message LIKE :key)"),
@@ -47,14 +48,16 @@ def search(key):
     result = result.fetchall()
     unified_result = []
     for row in result:
-        unified_result.append( {"name":row.title, "link":f"/posts/{row.id}"} ) #TODO works?
-    
+        unified_result.append(
+            {"name": row.title, "link": f"/posts/{row.id}"})
+
     return unified_result
+
 
 def get_by_user(user_id):
     result = db.session.execute(
         text("SELECT p.title, p.time, p.message, p.id, t.topic FROM posts p LEFT JOIN topics t ON "
              "t.id = p.topic_id WHERE p.user_id=:id ORDER BY p.id DESC"),
-        {"id":user_id}
+        {"id": user_id}
     )
     return result.fetchall()

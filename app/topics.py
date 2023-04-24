@@ -10,6 +10,7 @@ def get_all():
     result = db.session.execute(sql)
     return result.fetchall()
 
+
 def get_id(topic_name):
     sql = text("SELECT id FROM topics WHERE topic=:topic")
     result = db.session.execute(sql, {"topic": topic_name})
@@ -30,6 +31,7 @@ def delete(topic):
     )
     db.session.commit()
 
+
 def search(key):
     result = db.session.execute(
         text("SELECT topic FROM topics WHERE topic LIKE :key"),
@@ -38,6 +40,7 @@ def search(key):
     result = result.fetchall()
     unified_result = []
     for row in result:
-        unified_result.append( {"name":row.topic, "link": f"/topics/{row.topic}"} )
-    
+        unified_result.append(
+            {"name": row.topic+ " (aihealue)", "link": f"/topics/{row.topic}"})
+
     return unified_result
