@@ -17,9 +17,9 @@
 {% endif %}
 <hr>
 {% if session.username %}
-    <form action="/posts/{{ post.id }}" method="POST" onsubmit="return check(this)">
+    <form action="/posts/{{ post.id }}" method="POST">
         <i>Kommentoi keskustelua</i> <br>
-        <textarea name="comment" rows="5" cols="50" maxlength="5000"></textarea>
+        <textarea name="comment" id="comment" rows="5" cols="50" maxlength="5000"></textarea>
         <input type="submit" class="button" value="Lähetä">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
@@ -51,18 +51,15 @@
 
 
 <script>
+    // this doesn't alert for some reaosn
     function check(form) {
-        if (form.comment.value.length > 5000) {
-            alert("Viesti saa olla enintään 5000 merkkiä pitkä");
+        alert(form.comment.value, form.comment.value.length)
+        if (!form.comment.value.trim()) {
+            alert("Viesti ei saa olla tyhjä")
             return false;
         }
-        if(!form.comment.value) {
-            alert("Viesti ei saa olla tyhjä");
-            return false;
-        }
-    return true;
+        return true;
     }
-
     function areYouSure(form) {
         return confirm(`Haluatko varmasti poistaa tämän keskustelun? Sitä ei voi palauttaa poiston jälkeen.`)
     }
@@ -70,4 +67,5 @@
         return confirm(`Haluatko varmasti poistaa tämän kommentin? Sitä ei voi palauttaa poiston jälkeen.`)
     }
 </script>
+
 {% endblock %}

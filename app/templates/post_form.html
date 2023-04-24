@@ -27,18 +27,6 @@
 
 <script>
     function check(form) {
-        if (form.title.value.length > 75) {
-            alert("Otsikko saa olla enintään 75 merkkiä pitkä");
-            return false;
-        }
-        if (form.message.value.length > 5000) {
-            alert("Viesti saa olla enintään 5000 merkkiä pitkä");
-            return false;
-        }
-        if(!form.topic.value) {
-            alert("Aihealue on pakollinen")
-            return false;
-        }
         if (!form.title.value.trim()) {
             alert("Otsikko ei saa olla tyhjä");
             return false;

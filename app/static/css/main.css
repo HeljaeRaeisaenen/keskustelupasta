@@ -72,6 +72,9 @@ textarea {
     outline-style:solid;
     box-shadow: 0 0 0 4px #775d2c;
 }
+.error {
+    color: #c4330f;
+}
 .footer {
     position: fixed;
     text-align: center;

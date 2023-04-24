@@ -1,5 +1,6 @@
+import re
 from secrets import token_hex
-from flask import render_template, request, redirect, session, abort
+from flask import render_template, request, redirect, session, abort, flash
 from .app import app
 from . import users
 from . import topics
@@ -40,20 +41,20 @@ def loginaction():
         create_session(username)
 
         return redirect("/")
-    return redirect("/")  # ERRORMESSAGE
+    flash("Väärä käyttäjätunnus tai salasana")
+    return render_template("login.html")
 
 
 @app.route("/logout")
 def logout_action():
     del session["username"]
-    # del session["user_id"]
     del session["csrf_token"]
     return redirect("/")
 
 
 @app.route("/signup")
 def sign_up():
-    return render_template("create_user.html")
+    return render_template("signup.html")
 
 
 @app.route("/signup", methods=["POST"])
@@ -62,22 +63,21 @@ def sing_up_action():
     password = request.form["password"]
 
     if password != request.form["password_again"]:
-        return redirect("/signup")  # ERRORMESSAGE
+        flash("Salasanat eivät olleet samat")
+        return redirect("/signup")
 
     if users.find_user_id(username):
-        # ERRORMESSAGE
-        return render_template("create_user.html", error="username in use")
-        # ugly but idk how to pass a parameter otherwise
+        flash("Käyttäjätunnus on jo käytössä")
+        return redirect("/signup")
 
     stripped = username.strip('\t ')
-    if (not stripped) or (stripped == "deleted user"):
-        return redirect("/signup")  # ERRORMESSAGE
+    if (not stripped):
+        flash("Käyttäjänimi ei saa olla tyhjä")
+        return redirect("/signup")
 
     users.create_user(username, password)
-
     create_session(username)
 
-    # print(session)
     return redirect("/")
 
 
@@ -85,7 +85,6 @@ def sing_up_action():
 def show_topic(topic_name):
     topic_id = topics.get_id(topic_name)
     topic_posts = posts.get_all_posts(topic_id)
-    #print(topic_posts)
     return render_template("topic.html",
                            topic=topic_name,
                            posts=topic_posts,
@@ -109,13 +108,16 @@ def comment_post(post_id):
     check_csrf(request.form["csrf_token"])
 
     user_id = users.find_user_id(session["username"])
-    if not user_id:
-        pass  # ERRORMESSAGE
+    if not user_id: # commenting user doesn't exist
+        abort(403)
     comment = request.form["comment"]
+    comment = re.sub(r'\r\n', '', comment) # this is because html and python disagree on string len
     if len(comment) > 5000:
-        return redirect("/")  # ERRORMESSAGE
-    if not comment:
-        return redirect("/")  # ERRORMESSAGE
+        flash(f"Kommentti oli liian pitkä :( {len(comment)}")
+        return redirect(f"/posts/{post_id}")
+    if not comment.strip(" \t"):
+        flash("Kommentti ei saa olla tyhjä")
+        return redirect(f"/posts/{post_id}") 
     comments.create_comment(user_id, post_id, comment)
     return redirect(f"/posts/{post_id}")
 
@@ -137,10 +139,16 @@ def create_post():
     message = request.form["message"]
     topic_id = topics.get_id(request.form["topic"])
 
-    if (len(title) > 75) or (not title.strip('\t ')):
-        return redirect("/")  # ERRORMESSAGE
+    if len(title) > 75:
+        flash("Otsikko oli liian pitkä")
+        return redirect("/create")
+    if not title.strip("\t "):
+        flash("Otsikko ei saa olla tyhjä")
+        return redirect("/create")
+    message = re.sub(r'\r\n', '', message)
     if len(message) > 5000:
-        return redirect("/")  # ERRORMESSAGE
+        flash("Viesti oli liian pitkä")
+        return redirect("/create")
 
     post_id = posts.create_post(title, message, topic_id, found_user)
 
@@ -154,7 +162,8 @@ def create_topic():
         abort(403)
     topic = request.form["newtopic"]
     if not topic.strip('\t '):
-        redirect("/adminpage")  # ERRORMESSAGE
+        flash("Aihealueen nimi ei saa olla tyhjä")
+        redirect("/adminpage")
     created = topics.create(topic)
     return redirect(f"/topics/{created}")
 
@@ -234,7 +243,6 @@ def search_site_result():
         result += posts.search(keyword)
         result += users.search(keyword)
     
-    #print(result)
     if len(result) == 0:
         result.append({"name":"Mitään ei löytynyt"})
         
@@ -246,7 +254,6 @@ def search_site_result():
 
 def create_session(username):
     session["username"] = username
-    # session["user_id"] = users.find_user_id(username)  # useful??
     session["csrf_token"] = token_hex(16)
 
 

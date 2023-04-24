@@ -22,7 +22,10 @@
                     <a class="nav-link" href="/logout">Kirjaudu ulos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/new"></b>Luo keskustelu</b></a>
+                    <a class="nav-link" href="/new">Luo keskustelu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/{{session.username}}">Oma sivusi</a>
                 </li>
             {% else %}
                 <li class="nav-item">
@@ -55,6 +58,15 @@
         <br>
     {% endif %}
     <br>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+                <b class="error">Virhe: {{ message }}</b>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 
     {% block content%}{% endblock %}
 </div>
