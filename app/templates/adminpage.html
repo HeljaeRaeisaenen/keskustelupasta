@@ -14,7 +14,7 @@ Poista keskustelunaiheita HUOM. tämä ei poista aiheiden viestejä eikä kommen
 </form>
 <br>
 
-Poista käyttäjiä, tämä ei poista käyttäjän luomia viestejä tai kommentteja <br>
+Poista käyttäjiä HUOM. tämä ei poista käyttäjän luomia viestejä tai kommentteja <br>
 <form action="/deleteuser" method="POST" onsubmit="return areYouSure(this)">
     <select name="todelete" id="user">
         {% for u in users %}

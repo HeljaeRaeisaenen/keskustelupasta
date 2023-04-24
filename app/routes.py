@@ -195,6 +195,9 @@ def delete_user():
     user = request.form["todelete"]
 
     if user == session["username"]:
+        if check_admin():
+            flash("Ylläpitäjätunnuksia ei voi poistaa")
+            return redirect ("/")
         remove_session()
         users.delete(user)
         return redirect("/")
