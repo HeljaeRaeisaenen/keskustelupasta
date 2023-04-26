@@ -94,10 +94,12 @@ def show_topic(topic_name):
 def show_post(post_id):
     post = posts.get_post(post_id)
     post_comments = comments.get_comments(post_id)
+    img = images.get_by_post_id(post_id)
 
     return render_template("discussion.html",
                            post=post,
                            comments=post_comments,
+                           img=img,
                            session=session,
                            user_is_admin=check_admin())
 
@@ -155,15 +157,14 @@ def create_post():
     if len(message) > 5000:
         flash("Viesti oli liian pitkä")
         return redirect("/new")
+    post_id = posts.create_post(title, message, topic_id, found_user)
 
     img = request.files["img"]
-    result = images.create_image(img)
+    result = images.create_image(img, post_id)
 
     if result == "Image too large":
         flash("Kuva oli liian iso. Se saa olla max. 100 kt")
-        return redirect("/new")
-    
-    post_id = posts.create_post(title, message, topic_id, found_user, result)
+        return redirect("/new")    
 
     return redirect(f"/posts/{post_id}")
 

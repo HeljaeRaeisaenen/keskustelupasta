@@ -5,7 +5,9 @@
 <h3>{{ post.title }}</h3>
 <h6><i>Luonut</i> <a href="/user/{{post.username}}">{{ post.username }}</a> <i>aikaan</i> {{ post.time.strftime("%d.%m.%Y %H:%M") }}</h6>
 
-<p>Kuva:<a href="/showimage/{{post.img_id}}">{{post.img_name}}</a></p>
+{% if img %}
+    <p>Kuva:<a href="/showimage/{{img.id}}">{{img.name}}</a></p>
+{% endif %}
 <p>{{ post.message }}</p>
 <br>
 {% if (session.username == post.username) or user_is_admin %}
@@ -19,7 +21,7 @@
 <hr>
 {% if session.username %}
     <form action="/posts/{{ post.id }}" method="POST">
-        <i>Kommentoi keskustelua</i> <br>
+        <i>Kommentoi keskustelua:</i> <br>
         <textarea name="comment" id="comment" rows="5" cols="50" maxlength="5000"></textarea>
         <input type="submit" class="button" value="Lähetä">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
