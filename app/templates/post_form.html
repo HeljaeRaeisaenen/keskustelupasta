@@ -4,7 +4,7 @@
 
 <h2>Luo uusi keskustelu:</h2>
 
-<form action="/create" method="POST" onsubmit="return check(this)">
+<form action="/create" method="POST" enctype="multipart/form-data" onsubmit="return check(this)">
     Otsikko: <br>
     <input type="text" name="title" size="50" maxlength="75" required>
     <br>
@@ -14,7 +14,9 @@
             <option value="{{ t.topic }}">{{ t.topic }}</option>
         {% endfor%}
     </select> <br>
-    
+    Lisää halutessasi kuva: <br>
+    <input type="file" name="img">
+    <br>
     Viesti: <br>
     <textarea name="message" rows="7" cols="50" maxlength="5000"></textarea>
     <br>

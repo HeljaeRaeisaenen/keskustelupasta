@@ -1,12 +1,12 @@
 import re
 from secrets import token_hex
-from flask import render_template, request, redirect, session, abort, flash
+from flask import render_template, request, redirect, session, abort, flash, make_response
 from .app import app
 from . import users
 from . import topics
 from . import posts
 from . import comments
-
+from . import images
 
 @app.route("/")
 def index():
@@ -101,6 +101,12 @@ def show_post(post_id):
                            session=session,
                            user_is_admin=check_admin())
 
+@app.route("/showimage/<int:img_id>")
+def show_image(img_id):
+    data = images.get_by_id(img_id)
+    response = make_response(bytes(data))
+    response.headers.set("Content-Type", "image/jpeg")
+    return response
 
 @app.route("/posts/<int:post_id>", methods=["POST"])
 def comment_post(post_id):
@@ -141,16 +147,23 @@ def create_post():
 
     if len(title) > 75:
         flash("Otsikko oli liian pitkä")
-        return redirect("/create")
+        return redirect("/new")
     if not title.strip("\t "):
         flash("Otsikko ei saa olla tyhjä")
-        return redirect("/create")
+        return redirect("/new")
     message = re.sub(r'\r\n', '', message)
     if len(message) > 5000:
         flash("Viesti oli liian pitkä")
-        return redirect("/create")
+        return redirect("/new")
 
-    post_id = posts.create_post(title, message, topic_id, found_user)
+    img = request.files["img"]
+    result = images.create_image(img)
+
+    if result == "Image too large":
+        flash("Kuva oli liian iso. Se saa olla max. 100 kt")
+        return redirect("/new")
+    
+    post_id = posts.create_post(title, message, topic_id, found_user, result)
 
     return redirect(f"/posts/{post_id}")
 

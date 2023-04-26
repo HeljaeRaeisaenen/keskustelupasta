@@ -11,7 +11,7 @@
     {% if session.username == username %}
     <form action="/deleteuser" method="POST" onsubmit="return areYouSure(this)">
         <input type="hidden" name="todelete" value="{{username}}">
-        <input type="submit" class="button" value="Poista">
+        <input type="submit" class="button" value="Poista käyttäjätunnuksesi">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
     {% endif %}

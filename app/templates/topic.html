@@ -3,6 +3,10 @@
 {% block content %}
 <h1>{{ topic }}</h1>
 
+{% if session.username %}
+    <a class="btn button" href="/new">Luo keskustelu</a>
+    <hr>
+{% endif %}
 {% for post in posts %}
     <a href="/posts/{{ post.id }}"><h2>{{ post.title }}</h2></a>
     <p><i>Käyttäjältä</i> {{ post.username }}</p>
