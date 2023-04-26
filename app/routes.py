@@ -8,6 +8,7 @@ from . import posts
 from . import comments
 from . import images
 
+
 @app.route("/")
 def index():
     topic_s = topics.get_all()
@@ -103,12 +104,14 @@ def show_post(post_id):
                            session=session,
                            user_is_admin=check_admin())
 
+
 @app.route("/showimage/<int:img_id>")
 def show_image(img_id):
     data = images.get_by_id(img_id)
     response = make_response(bytes(data))
     response.headers.set("Content-Type", "image/jpeg")
     return response
+
 
 @app.route("/posts/<int:post_id>", methods=["POST"])
 def comment_post(post_id):
@@ -164,7 +167,7 @@ def create_post():
 
     if result == "Image too large":
         flash("Kuva oli liian iso. Se saa olla max. 100 kt")
-        return redirect("/new")    
+        return redirect("/new")
 
     return redirect(f"/posts/{post_id}")
 
@@ -211,7 +214,7 @@ def delete_user():
     if user == session["username"]:
         if check_admin():
             flash("Ylläpitäjätunnuksia ei voi poistaa")
-            return redirect ("/")
+            return redirect("/")
         remove_session()
         users.delete(user)
         return redirect("/")
@@ -283,9 +286,11 @@ def create_session(username):
     session["username"] = username
     session["csrf_token"] = token_hex(16)
 
+
 def remove_session():
     del session["username"]
     del session["csrf_token"]
+
 
 def check_csrf(token):
     if session["csrf_token"] != token:

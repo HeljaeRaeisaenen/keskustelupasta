@@ -6,7 +6,7 @@ def create_post(title, message, topic, user):
     sql = text(
         "INSERT INTO posts (title,message,time,user_id,topic_id) VALUES "
         "(:title,:message,NOW(),:user,:topic) RETURNING id")
-    
+
     result = db.session.execute(
         sql, {"title": title, "message": message, "user": user, "topic": topic})
     post_id = result.fetchone()[0]

@@ -41,6 +41,6 @@ def search(key):
     unified_result = []
     for row in result:
         unified_result.append(
-            {"name": row.topic+ " (aihealue)", "link": f"/topics/{row.topic}"})
+            {"name": row.topic + " (aihealue)", "link": f"/topics/{row.topic}"})
 
     return unified_result
