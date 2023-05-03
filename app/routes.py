@@ -201,10 +201,14 @@ def userpage(username):
     if username == "deleted user":
         abort(404)
     user_posts = posts.get_by_user(users.find_user_id(username))
-    return render_template("user_page.html",
-                           user_posts=user_posts,
-                           username=username)
-
+    
+    response = make_response(render_template(
+        "user_page.html",
+        user_posts=user_posts,
+        username=username
+    ))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    return response
 
 @app.route("/deleteuser", methods=["POST"])
 def delete_user():
